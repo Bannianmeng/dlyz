@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<suite name="Suite" parallel="false">
+    <test name="suite_name">
+        <classes>
+            <class name="dosoar.Thred.Demo_01"/>
+        </classes>
+    </test>
+</suite>

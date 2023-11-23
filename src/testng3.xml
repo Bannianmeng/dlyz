@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<suite name="Suite" parallel="false">
+    <test name="suite_name">
+<!--        <parameter name = "exePath" value = "D:\\KJ.exe"/>-->
+
+        <classes>
+            <class name="dosoar.testngRunSelenium.demo_01"/>
+        </classes>
+    </test>
+</suite>
