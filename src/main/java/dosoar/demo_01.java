@@ -24,6 +24,9 @@ public class demo_01 {
 
     }
 
+    /**
+     * 测试后
+     */
     @BeforeGroups(groups = "1")
     public void afterTest() {
         System.out.println("测试结束");
