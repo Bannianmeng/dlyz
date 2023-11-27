@@ -23,6 +23,7 @@ public class demo_01 {
 
     }
     @Test(groups = "1")
+
     public void Test2() {
         System.out.println("执行中2");
 

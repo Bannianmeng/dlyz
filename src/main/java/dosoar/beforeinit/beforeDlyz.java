@@ -1,6 +1,7 @@
 package dosoar.beforeinit;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 
@@ -24,6 +25,8 @@ public class beforeDlyz {
         driver.findElement(By.id("basic_password")).clear();
         driver.findElement(By.id("basic_password")).sendKeys("Dosoar@123456");
         Thread.sleep(1000);
+
+
         return driver;
     }
 }
