@@ -75,7 +75,7 @@ public class LogIn {
             System.out.println("保存验证码截图出现异常");
             throw new RuntimeException(e);
         }
-
+        //TODO 补充删除screenshotFile
         return png ? file : null;
     }
 
