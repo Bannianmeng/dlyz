@@ -55,7 +55,7 @@ public class demo_01 {
              * 传路径，调用获取验证码接口。
              */
 
-        String authcode = AuthCode.getCode(filePath.toString());
+//        String authcode = AuthCode.getCode(filePath.toString());
 //        driver.findElement(By.id("basic_captcha")).sendKeys(authcode);
             Thread.sleep(5000);
 //        driver.findElement(By.id("basic_captcha")).sendKeys("123456");  //输入验证码

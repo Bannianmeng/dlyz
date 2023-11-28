@@ -1,26 +1,35 @@
-package dosoar.ffdm;
+package tool;
 
 import cn.hutool.core.io.FileUtil;
 import com.alibaba.fastjson.JSONObject;
 import dosoar.demo_01;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-public class AuthCode {
+import tool.ffdm.*;
+
+public class ffdmTool {
+
+
     /**
-     * @param img_file 验证码图片文件的路径
-     * @return         验证码数字
-     * @throws Exception
+     * 获取验证码
+     *
      */
     public static String getCode(File img_file) throws Exception {
         /**
-         * 读取配置文件初始化代码
+         * 初始化读取相关配置文件
          */
         Properties properties = new Properties();
         InputStream input = demo_01.class.getClassLoader().getResourceAsStream("config.properties");
-        properties.load(input);
+        try {
+            properties.load(input);
+        } catch (IOException e) {
+            System.out.println("读取文件到内存中出错");
+            throw new RuntimeException(e);
+        }
 
         Api api = new Api();
         String app_id = properties.getProperty("app_id");
@@ -33,10 +42,6 @@ public class AuthCode {
         double balance = api.QueryBalcExtend();    // 直接返回余额结果
         System.out.println("剩余积分余额:" + balance);
 
-
-        /**
-         * 调用识别验证码接口
-         */
 
         byte[] file = FileUtil.readBytes(img_file);//形参接收文件路径
         Util.HttpResp res1 = api.Predict(pred_type, file);// 直接返回识别结果
@@ -52,10 +57,13 @@ public class AuthCode {
          */
 
         JSONObject jsonObject = JSONObject.parseObject(res1.rsp_data);
-        String authCode = jsonObject.getString("result");
-        System.out.println(authCode);
-
-        return authCode;
+        String Code = jsonObject.getString("result");
+        System.out.println(Code);
+        return Code;
     }
 
+    public static void main(String[] args) throws Exception {
+        File file = new File("D:\\789.png");
+        String code = ffdmTool.getCode(file);
+    }
 }

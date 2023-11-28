@@ -1,4 +1,4 @@
-package dosoar.ffdm;
+package tool.ffdm;
 
 import cn.hutool.core.io.FileUtil;
 import com.alibaba.fastjson.JSONObject;

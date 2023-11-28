@@ -1,13 +1,18 @@
 package page;
 
+import cn.hutool.json.JSONUtil;
 import org.openqa.selenium.*;
+import org.testng.annotations.Test;
 import tool.DriverTool;
+import tool.ffdmTool;
 
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 
 public class LogIn {
     private static WebDriver driver = DriverTool.getDriver();
@@ -20,20 +25,29 @@ public class LogIn {
      * @return {@link WebDriver}
      * @throws InterruptedException 中断异常
      */
-    public static WebDriver LogIn() throws InterruptedException {
+    public static WebDriver LogIn() {
 
         driver.findElement(By.id("basic_account")).sendKeys("whh");//输入账号
-        Thread.sleep(1000);
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
 
         driver.findElement(By.id("basic_password")).sendKeys("Dosoar@123456");//输入密码
-        Thread.sleep(1000);
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
         return driver;
     }
 
     /**
      * 截图（全屏）
+     * 出参：截图路径
      */
-    public static String Screenshot() throws IOException {
+    public static File Screenshot() {
 
         File screenshotFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);//获取整个页面的屏幕截图
 
@@ -52,30 +66,61 @@ public class LogIn {
             e.printStackTrace();
         }
         BufferedImage codeImage = fullImage.getSubimage(location.getX(), location.getY(), width, height);//截取特定位置的图片
-        File file = new File("D:\\dlyz\\src\\main\\resources\\img" + screenshotFile.getName());
-        String ImagePath = "D:\\dlyz\\src\\main\\resources\\img" + screenshotFile.getName();
-        ImageIO.write(codeImage, "png", file); //保存截图
+        File file = new File("D:\\dlyz\\src\\main\\resources\\img\\", screenshotFile.getName());
 
+        boolean png = false;//保存截图
+        try {
+            png = ImageIO.write(codeImage, "png", file);
+        } catch (IOException e) {
+            System.out.println("保存验证码截图出现异常");
+            throw new RuntimeException(e);
+        }
 
-        return ImagePath;
+        return png ? file : null;
     }
 
     /**
      * 调用斐斐打码获取验证码
      */
-    public static String getFfdm(String imagPath) {
-        File file = new File(imagPath);
+    public static String getFfdm(File file) throws Exception {
         //TODO 去调用斐斐打码获取验证码code
-        String code = null;
+
+        String code = ffdmTool.getCode(file);
         System.out.println("验证码：" + code);
         driver.findElement(By.id("basic_captcha")).sendKeys(code);//输入验证码
-        driver.findElement(By.xpath("//*[@id=\"basic\"]/div[4]/div/div/div/div/button")).click();//点击登录
-        if (driver.getWindowHandle() != "https://remote.dosoar.com/#/user/login?redirect=%2F") {
-            System.out.println("登录成功");
-        }
 
 
         return code;
+    }
+
+    /**
+     * 输入验证码并点击
+     *
+     * @param verificationCode 验证码
+     */
+    public static void enterVerificationCode(String verificationCode) {
+        driver.findElement(By.id("basic_captcha")).sendKeys();
+    }
+
+
+    /**
+     * 点击登录
+     */
+    public static void clickToLogIn() {
+        try {
+            driver.findElement(By.xpath("//*[@id=\"basic\"]/div[4]/div/div/div/div/button/span")).click();
+            if (driver.getWindowHandle() != "https://remote.dosoar.com/#/user/login?redirect=%2F") {
+                System.out.println("登录成功");
+            }
+        } catch (Exception e) {
+            System.out.println("点击登录失败");
+        }
+    }
+
+    @Test
+    public static void Test() {
+        Screenshot();
+        System.out.println("测试");
     }
 
 }
